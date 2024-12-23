@@ -1,5 +1,5 @@
 FROM node:20-alpine
-USER root
+USER node
 WORKDIR /usr/local/app
 COPY package.json .
 RUN npm install
