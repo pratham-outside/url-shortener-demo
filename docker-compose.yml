@@ -16,25 +16,25 @@ services:
       - app-network
     volumes:
       - database_volume:/var/lib/postgresql/data
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     postgresc:
-  #       condition: service_healthy
-  #   environment:
-  #     HOST: postgresc
-  #     PORT: 5432
-  #     USER: ${POSTGRES_USER}
-  #     PASSWORD: ${POSTGRES_PASSWORD}
-  #     NAME: ${POSTGRES_DB}
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - app-network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      postgresc:
+        condition: service_healthy
+    environment:
+      HOST: postgresc
+      PORT: 5432
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+      NAME: ${POSTGRES_DB}
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - app-network
 
   # sonarqube:
   #   image: 'sonarqube:latest'
@@ -47,12 +47,12 @@ services:
   #     - SONAR_JDBC_PASSWORD=${POSTGRES_PASSWORD}
   #   networks:
   #     - app-network
-  #   volumes:
-  #     - sonarqube_data:/opt/sonarqube/data
-  #     - sonarqube_extensions:/opt/sonarqube/extensions
-  #     - sonarqube_logs:/opt/sonarqube/logs
-  #   ports:
-  #     - '9000:9000'
+  # volumes:
+  #   - sonarqube_data:/opt/sonarqube/data
+  #   - sonarqube_extensions:/opt/sonarqube/extensions
+  #   - sonarqube_logs:/opt/sonarqube/logs
+  # ports:
+  #   - '9000:9000'
 volumes:
   database_volume:
   # sonarqube_data:

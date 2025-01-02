@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import { z } from 'zod';
 config();
-export const envVariables = {
+export const env = {
 	POSTGRES_DB: process.env.POSTGRES_DB,
 	POSTGRES_USER: process.env.POSTGRES_USER,
 	POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
@@ -9,9 +9,12 @@ export const envVariables = {
 	DB_HOST: process.env.DB_HOST,
 	APP_PORT: +process.env.APP_PORT,
 	NODE_ENV: process.env.NODE_ENV,
+	JWT_SECRET: process.env.JWT_SECRET,
+	JWT_EXPIRATION: process.env.JWT_EXPIRATION,
+	SALT_ROUND: +process.env.SALT_ROUND,
 } as const;
 
-enum APP_ENVIRONVENT {
+export enum APP_ENVIRONVENT {
 	DEVELOPMENT = 'development',
 	PRODUCTION = 'production',
 }
@@ -24,11 +27,14 @@ const validationSchema = z
 		DB_HOST: z.string().min(2, { message: 'Must be atleast 2 characters long' }),
 		APP_PORT: z.number().gt(0, { message: 'Port cannot be empty' }),
 		NODE_ENV: z.nativeEnum(APP_ENVIRONVENT),
+		JWT_SECRET: z.string().min(5, { message: 'JWT secret key cannot be smaller than 5' }),
+		JWT_EXPIRATION: z.string().min(1, { message: 'JWT_EXPIRATION time cannot be empty' }),
+		SALT_ROUND: z.coerce.number().default(10),
 	})
 	.required();
 
 export const validate = () => {
-	const value = validationSchema.safeParse(envVariables);
+	const value = validationSchema.safeParse(env);
 	if (!value.success) {
 		throw new Error(`---${value.error.issues[0].path} :: ${value.error.issues[0].message.toUpperCase()}---`);
 	}

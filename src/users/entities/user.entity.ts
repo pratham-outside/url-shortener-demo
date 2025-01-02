@@ -2,22 +2,22 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column({ unique: true })
-  email: string;
+	@Column({ unique: true })
+	email: string;
 
-  @Column()
-  password: string;
+	@Column()
+	password_hash: string;
 
-  @Column()
-  full_name: string;
+	@Column()
+	name: string;
 
-  @Column({ default: false })
-  isValidated: boolean;
+	@Column({ default: false })
+	is_verified: boolean;
 
-  //   @Column({})
-  //   @OneToMany(())
-  //   urlId: number;
+	//   @Column({})
+	//   @OneToMany(())
+	//   urlId: number;
 }
